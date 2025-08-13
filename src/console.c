@@ -478,6 +478,8 @@ void CON_Init(void)
 	// register our commands
 	//
 	COM_AddCommand("cls", CONS_Clear_f, 0);
+	COM_AddCommand("clear", CONS_Clear_f, 0);
+	// ^^ Probably a better way to do it but I'm leaving it like this, too lazy
 	//COM_AddCommand("english", CONS_English_f);
 	// set console full screen for game startup MAKE SURE VID_Init() done !!!
 	Lock_state();
