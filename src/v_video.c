@@ -53,7 +53,7 @@ consvar_t cv_compactaddonlist = CVAR_INIT ("compactaddons", "No", CV_SAVE, CV_Ye
 
 static void CV_palette_OnChange(void);
 
-static CV_PossibleValue_t gamma_cons_t[] = {{-15, "MIN"}, {5, "MAX"}, {0, NULL}};
+static CV_PossibleValue_t gamma_cons_t[] = {{-25, "MIN"}, {25, "MAX"}, {0, NULL}};
 consvar_t cv_globalgamma = CVAR_INIT ("gamma", "0", CV_SAVE|CV_CALL, gamma_cons_t, CV_palette_OnChange);
 
 static CV_PossibleValue_t saturation_cons_t[] = {{0, "MIN"}, {10, "MAX"}, {0, NULL}};
