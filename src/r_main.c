@@ -61,7 +61,7 @@ size_t framecount;
 size_t loopcount;
 
 fixed_t viewx, viewy, viewz;
-angle_t viewangle, aimingangle;
+angle_t viewangle, aimingangle, viewroll;
 fixed_t viewcos, viewsin;
 sector_t *viewsector;
 player_t *viewplayer;
@@ -70,6 +70,7 @@ mobj_t *r_viewmobj;
 boolean r_renderwalls;
 boolean r_renderfloors;
 boolean r_renderthings;
+boolean r_inskybox;
 
 fixed_t rendertimefrac;
 fixed_t renderdeltatics;
@@ -608,7 +609,7 @@ void R_CheckViewMorph(void)
 	float fisheyemap[MAXVIDWIDTH/2 + 1];
 #endif
 
-	angle_t rollangle = players[displayplayer].viewrollangle;
+	angle_t rollangle = viewroll;
 #ifdef WOUGHMP_WOUGHMP
 	fixed_t fisheye = cv_cam2_turnmultiplier.value; // temporary test value
 #endif
@@ -1108,6 +1109,7 @@ void R_SetupFrame(player_t *player)
 		thiscam = &camera;
 
 	newview->sky = false;
+	newview->roll = player->viewrollangle;
 
 	if (player->awayviewtics)
 	{
@@ -1261,6 +1263,7 @@ void R_SkyboxFrame(player_t *player)
 
 	// cut-away view stuff
 	newview->sky = true;
+	newview->roll = player->viewrollangle;
 	r_viewmobj = skyboxmo[0];
 #ifdef PARANOIA
 	if (!r_viewmobj)
@@ -1616,6 +1619,7 @@ void R_RenderPlayerView(player_t *player)
 
 			masks = realloc(masks, (++nummasks)*sizeof(maskcount_t));
 
+			r_inskybox = portal->is_skybox;
 			Mask_Pre(&masks[nummasks - 1]);
 			curdrawsegs = ds_p;
 
@@ -1635,6 +1639,8 @@ void R_RenderPlayerView(player_t *player)
 			Portal_AddPlanePortals(cv_skybox.value && !portal->is_skybox);
 
 			Mask_Post(&masks[nummasks - 1]);
+
+			r_inskybox = false;
 
 			R_ClipSprites(ds_p - (masks[nummasks - 1].drawsegs[1] - masks[nummasks - 1].drawsegs[0]), portal);
 
